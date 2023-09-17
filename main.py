@@ -4,8 +4,7 @@ from modules.scraping import get_match_days
 
 
 if __name__ == '__main__':
-    credentials = authenticate_app(
-        './credentials/client_secret_501958182067-kglkrtk62jmcsae2dojk84jf8e9celmp.apps.googleusercontent.com.json')
+    credentials = authenticate_app()
 
     events = get_events(credentials)
     match_days = get_match_days("data/fecapa_cal_idc_2218_1.php")

@@ -1,5 +1,5 @@
 /config/config.json
 /credentials/client_secret_501958182067-kglkrtk62jmcsae2dojk84jf8e9celmp.apps.googleusercontent.com.json
-/credentials/token.json
+/credentials/token.pickle
 /data/fecapa_cal_idc_2218_1.php
 .idea/vcs.xml
