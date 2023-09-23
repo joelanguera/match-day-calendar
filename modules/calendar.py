@@ -1,15 +1,20 @@
 from googleapiclient.discovery import build
 from datetime import datetime, timedelta
-import random
-import string
+import pytz
+
+
+def add_timezone_to_datetime(dt, time_zone):
+    tz = pytz.timezone(time_zone)
+    localized_dt = tz.localize(dt)
+    return localized_dt
 
 
 class Event:
     def __init__(self, summary, description, start_datetime, time_zone='Europe/Madrid'):
         self.summary = summary
         self.description = description
-        self.start_datetime = start_datetime
-        self.end_datetime = start_datetime + timedelta(minutes=90)
+        self.start_datetime = add_timezone_to_datetime(start_datetime, time_zone)
+        self.end_datetime = add_timezone_to_datetime(start_datetime + timedelta(minutes=90), time_zone)
         self.time_zone = time_zone
 
     def get_event(self):
@@ -17,12 +22,10 @@ class Event:
             'summary': self.summary,
             'description': 'description',
             'start': {
-                'dateTime': self.start_datetime.strftime('%Y-%m-%dT%H:%M:%S'),
-                'timeZone': self.time_zone,
+                'dateTime': self.start_datetime.isoformat(),
             },
             'end': {
-                'dateTime': self.end_datetime.strftime('%Y-%m-%dT%H:%M:%S'),
-                'timeZone': self.time_zone,
+                'dateTime': self.end_datetime.isoformat(),
             },
         }
         return event

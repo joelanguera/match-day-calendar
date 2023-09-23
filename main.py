@@ -27,7 +27,7 @@ if __name__ == '__main__':
         else:
             new_event = Event(fecapa_event.localTeam.name + ' - ' + fecapa_event.visitantTeam.name,
                               fecapa_event.match_day_number, fecapa_event.date_time)
-            if calendar_event['start']['dateTime'] != new_event.start_datetime:
+            if calendar_event['start']['dateTime'] != new_event.start_datetime.isoformat():
                 calendar_event['start']['dateTime'] = new_event.start_datetime.isoformat()
                 calendar_event['end']['dateTime'] = new_event.end_datetime.isoformat()
                 update_event(credentials, saved_event_id, calendar_event)
