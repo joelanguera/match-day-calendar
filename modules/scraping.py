@@ -2,6 +2,16 @@ from bs4 import BeautifulSoup
 from .helper import clean_text
 from .matchday import MatchDay
 from .matchday import Team
+import requests
+from .data_handler import *
+
+
+def request_webpage(url):
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.text
+    else:
+        return None
 
 
 def get_match_days(filename):
