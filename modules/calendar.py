@@ -20,7 +20,7 @@ class Event:
     def get_event(self):
         event = {
             'summary': self.summary,
-            'description': 'description',
+            'description': self.description,
             'start': {
                 'dateTime': self.start_datetime.isoformat(),
             },

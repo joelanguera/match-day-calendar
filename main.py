@@ -21,13 +21,18 @@ if __name__ == '__main__':
         if not calendar_event:
             new_event = Event(fecapa_event.localTeam.name + ' - ' + fecapa_event.visitantTeam.name,
                               fecapa_event.match_day_number, fecapa_event.date_time)
-            result = create_event_dry_run(credentials, new_event.get_event())
-            save_event_match_day(fecapa_event.match_day_number, result.id)
+            result = create_event(credentials, new_event.get_event())
+            save_event_match_day(fecapa_event.match_day_number, result['id'])
 
         else:
             new_event = Event(fecapa_event.localTeam.name + ' - ' + fecapa_event.visitantTeam.name,
                               fecapa_event.match_day_number, fecapa_event.date_time)
             if calendar_event['start']['dateTime'] != new_event.start_datetime.isoformat():
+                old_datetime = calendar_event['start']['dateTime']
                 calendar_event['start']['dateTime'] = new_event.start_datetime.isoformat()
                 calendar_event['end']['dateTime'] = new_event.end_datetime.isoformat()
                 update_event(credentials, saved_event_id, calendar_event)
+                print(f"Event updated:\n"
+                      f"   Match: {new_event.summary}\n"
+                      f"   Old time: {old_datetime}\n"
+                      f"   New time: {new_event.start_datetime.isoformat()}\n\n")
