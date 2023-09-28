@@ -2,6 +2,7 @@ import pickle
 import os
 from google_auth_oauthlib.flow import InstalledAppFlow
 from datetime import datetime
+import logging
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 CURRENT_DIRECTORY = os.path.dirname(__file__)
@@ -15,9 +16,11 @@ def authenticate_app():
             credentials = pickle.load(token_file)
             if credentials.expiry <= datetime.utcnow():
                 credentials = renew_token()
+                logging.info("Access token renewed")
 
     except (FileNotFoundError, pickle.UnpicklingError):
         renew_token()
+        logging.info("Access token renewed")
 
     with open(TOKEN_FILE_PATH, 'wb') as token_file:
         pickle.dump(credentials, token_file)

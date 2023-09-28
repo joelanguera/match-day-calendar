@@ -3,14 +3,16 @@ from .helper import clean_text
 from .matchday import MatchDay
 from .matchday import Team
 import requests
-from .data_handler import *
+import logging
 
 
 def request_webpage(url):
     response = requests.get(url)
     if response.status_code == 200:
+        logging.info("Response code 200 on requested url: '%s'.", url)
         return response.text
     else:
+        logging.error("Response code not 200 on requested url: '%s'.", url)
         return None
 
 
@@ -38,5 +40,5 @@ def get_match_days(filename):
                 match_day = MatchDay(date=date, hour=hour, match_day_number=match_day_number, local_team=local_team,
                                      visitant_team=visitant_team, result=result)
                 match_days.append(match_day)
-
+    logging.info("File scrapped: OK")
     return match_days

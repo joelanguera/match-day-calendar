@@ -2,9 +2,13 @@ from modules.authentication import *
 from modules.calendar import *
 from modules.scraping import *
 from modules.data_handler import *
+import logging
 
 
 if __name__ == '__main__':
+    logging.basicConfig(filename='logs/my_program.log', level=logging.INFO,
+                        format='%(asctime)s - %(levelname)s - %(name)s - %(message)s')
+
     response = request_webpage('http://www.server2.sidgad.es/fecapa/fecapa_cal_idc_2218_1.php')
     if not response:
         exit()

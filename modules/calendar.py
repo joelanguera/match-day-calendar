@@ -1,3 +1,4 @@
+import logging
 from googleapiclient.discovery import build
 from datetime import datetime, timedelta
 import pytz
@@ -35,6 +36,7 @@ def get_events(credentials):
     calendar_id = 'c869dc6f6dee81ae343eced0a4d969e33b95892e88cf588a3eb373129492a640@group.calendar.google.com'
     calendar_service = build('calendar', 'v3', credentials=credentials)
     events = calendar_service.events().list(calendarId=calendar_id).execute()
+    logging.info("Events requested from calendar: OK")
     return events
 
 
@@ -42,6 +44,7 @@ def get_event_by_id(credentials, event_id):
     calendar_id = 'c869dc6f6dee81ae343eced0a4d969e33b95892e88cf588a3eb373129492a640@group.calendar.google.com'
     calendar_service = build('calendar', 'v3', credentials=credentials)
     event = calendar_service.events().get(calendarId=calendar_id, eventId=event_id).execute()
+    logging.info("Event requested from calendar: OK")
     return event
 
 
@@ -50,6 +53,7 @@ def update_event(credentials, event_id, updated_event):
     calendar_service = build('calendar', 'v3', credentials=credentials)
     event = calendar_service.events().update(calendarId=calendar_id, eventId=event_id,
                                              body=updated_event).execute()
+    logging.info("Event updated. id: '%s'", event['id'])
     return event
 
 
@@ -57,6 +61,7 @@ def create_event(credentials, event):
     calendar_id = 'c869dc6f6dee81ae343eced0a4d969e33b95892e88cf588a3eb373129492a640@group.calendar.google.com'
     calendar_service = build('calendar', 'v3', credentials=credentials)
     event = calendar_service.events().insert(calendarId=calendar_id, body=event).execute()
+    logging.info("New event created with id: '%s'", event['id'])
     return event
 
 
