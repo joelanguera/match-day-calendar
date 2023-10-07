@@ -19,7 +19,7 @@ def authenticate_app():
                 logging.info("Access token renewed")
 
     except (FileNotFoundError, pickle.UnpicklingError):
-        renew_token()
+        credentials = renew_token()
         logging.info("Access token renewed")
 
     with open(TOKEN_FILE_PATH, 'wb') as token_file:
