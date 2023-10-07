@@ -2,6 +2,7 @@ from modules.authentication import *
 from modules.calendar import *
 from modules.scraping import *
 from modules.data_handler import *
+from modules.email_handler import *
 import logging
 
 
@@ -35,8 +36,13 @@ if __name__ == '__main__':
                 old_datetime = calendar_event['start']['dateTime']
                 calendar_event['start']['dateTime'] = new_event.start_datetime.isoformat()
                 calendar_event['end']['dateTime'] = new_event.end_datetime.isoformat()
+                subject = "Canvi d'horari en: " + new_event.summary
+                message_text = (f"Event updated:\n"
+                                f"   Match: {new_event.summary}\n"
+                                f"   Old time: {old_datetime}\n"
+                                f"   New time: {new_event.start_datetime.isoformat()}\n\n")
+                gmail_credentials = get_gmail_credentials()
+                email = Email("joel.anguera@gmail.com", subject, message_text)
+                email.send(gmail_credentials)
                 update_event(credentials, saved_event_id, calendar_event)
-                print(f"Event updated:\n"
-                      f"   Match: {new_event.summary}\n"
-                      f"   Old time: {old_datetime}\n"
-                      f"   New time: {new_event.start_datetime.isoformat()}\n\n")
+                print(message_text)
