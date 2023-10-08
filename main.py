@@ -3,18 +3,24 @@ from modules.calendar import *
 from modules.scraping import *
 from modules.data_handler import *
 import logging
+from modules.helper import *
+
+CONFIG = get_config()
 
 
 if __name__ == '__main__':
     logging.basicConfig(filename='logs/my_program.log', level=logging.INFO,
                         format='%(asctime)s - %(levelname)s - %(name)s - %(message)s')
 
-    response = request_webpage('http://www.server2.sidgad.es/fecapa/fecapa_cal_idc_2218_1.php')
+    credentials = authenticate_app()
+
+    url = 'http://www.server2.sidgad.es/fecapa/fecapa_cal_idc_2218_1.php'
+    response = make_post_request(url, dict(CONFIG['FECAPA_POST_DATA']), headers=dict(CONFIG['FECAPA_POST_HEADERS']))
     if not response:
+        logging.error("Error retrieving data from url: {}".format(url))
         exit()
     save_to_file('data/fecapa_cal_idc_2218_1.php', response)
 
-    credentials = authenticate_app()
     calendar_events = get_events(credentials)
 
     fecapa_events = get_match_days("data/fecapa_cal_idc_2218_1.php")

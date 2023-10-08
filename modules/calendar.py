@@ -52,7 +52,7 @@ def update_event(credentials, event_id, updated_event):
     calendar_id = 'c869dc6f6dee81ae343eced0a4d969e33b95892e88cf588a3eb373129492a640@group.calendar.google.com'
     calendar_service = build('calendar', 'v3', credentials=credentials)
     event = calendar_service.events().update(calendarId=calendar_id, eventId=event_id,
-                                             body=updated_event).execute()
+                                             body=updated_event,  sendUpdates='all').execute()
     logging.info("Event updated. id: '%s'", event['id'])
     return event
 

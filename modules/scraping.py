@@ -6,13 +6,24 @@ import requests
 import logging
 
 
-def request_webpage(url):
+def make_post_request(url, data, headers):
+    response = requests.post(url, data=data, headers=headers)
+
+    if response.status_code == 200:
+        logging.info("Response code 200 on requested url: '%s'.", url)
+        return response.text
+    else:
+        logging.error("Response code '%s' on requested url: '%s'.", response.status_code, url)
+        return None
+
+
+def make_get_request(url):
     response = requests.get(url)
     if response.status_code == 200:
         logging.info("Response code 200 on requested url: '%s'.", url)
         return response.text
     else:
-        logging.error("Response code not 200 on requested url: '%s'.", url)
+        logging.error("Response code '%s' on requested url: '%s'.", response.status_code, url)
         return None
 
 
