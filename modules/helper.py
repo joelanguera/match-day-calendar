@@ -14,4 +14,3 @@ def get_config():
 
 def clean_text(text):
     return re.sub(r'[^\x20-\xFF]+', '', text)
-

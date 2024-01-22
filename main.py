@@ -1,5 +1,6 @@
 from modules.authentication import *
 from modules.calendar import *
+from modules.email_handler import Email
 from modules.scraping import *
 from modules.data_handler import *
 import logging
@@ -25,6 +26,7 @@ if __name__ == '__main__':
 
     fecapa_events = get_match_days("data/fecapa_cal_idc_2218_1.php")
     saved_events_id_list = load_or_create_json_from_file("data/match_day_event.json")
+    message_text = ""
     for fecapa_event in fecapa_events:
         saved_event_id = saved_events_id_list.get(fecapa_event.match_day_number)
         calendar_event = next((evento for evento in calendar_events.get('items', []) if evento['id'] == saved_event_id), None)
@@ -41,8 +43,12 @@ if __name__ == '__main__':
                 old_datetime = calendar_event['start']['dateTime']
                 calendar_event['start']['dateTime'] = new_event.start_datetime.isoformat()
                 calendar_event['end']['dateTime'] = new_event.end_datetime.isoformat()
+
+                message_text += (f"Partit: {new_event.summary}\n"
+                                 f"   Antic horari: {old_datetime}\n"
+                                 f"   Nou horari: {new_event.start_datetime.isoformat()}\n\n")
                 update_event(credentials, saved_event_id, calendar_event)
-                print(f"Event updated:\n"
-                      f"   Match: {new_event.summary}\n"
-                      f"   Old time: {old_datetime}\n"
-                      f"   New time: {new_event.start_datetime.isoformat()}\n\n")
+    if message_text:
+        subject = "Actualització d'horaris partits"
+        email = Email("joel.anguera@gmail.com", subject, message_text)
+        email.send()
